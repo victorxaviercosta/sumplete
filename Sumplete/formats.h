@@ -1,6 +1,10 @@
 #ifndef FORTMATS_H
 #define FORTMATS_H
 
+//Needed macros for the game.
+#define MAX_NAME_SIZE 21
+#define MAX_COMMAND_SIZE 11 
+
 // Colors and formats for text.
 #define ANSI_RESET            "\x1b[0m"
 #define ANSI_BOLD             "\x1b[1m"
@@ -66,5 +70,24 @@
 #define TAB_TR  "\u2510" // ┐ (top-right)
 #define TAB_MR  "\u2524" // ┤ (middle-right)
 #define TAB_BR  "\u2518" // ┘ (bottom-right)
+
+
+//Error macros definition.
+#define INVALID_OPTION_ERROR "OPÇÃO INVÁLIDA!"
+#define INVALID_COMMAND_ERROR "COMANDO INVÁLIDO!"
+#define INVALID_SIZE_ERROR "TAMANHO DE TABULEIRO INVÁLIDO!"
+#define INVALID_DIFFICULT_ERROR "DIFICULDADE INVÁLIDA!"
+#define BOARD_CREATION_FAIL "NÃO FOI POSSÍVEL CRIAR O TABULEIRO!"
+#define INVALID_INDEXES_ERROR "INDICES INVÁLIDOS!"
+#define INVALID_FILE_EXTENTION_ERROR "A EXTENÇÃO DO ARQUIVO DEVE SER .txt!"
+
+//Prints-out the specified error message.
+#define printError(error_name) printf(BOLD(RED("\n\t\t\t\t %s\n\n")), error_name)
+
+//Success macros definition
+#define FILE_SUCCESSFULLY_SAVED "ARQUIVO GRAVADO COM SUCESSO!"
+
+//Prints-out the specified success message.
+#define printSuccess(success_name) printf(BOLD(GREEN("\n\t\t\t\t %s\n\n")), success_name);
 
 #endif //FORMATS_H
