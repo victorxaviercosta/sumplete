@@ -26,9 +26,6 @@ void printDifficultInterface(char difficult_levels);
 //Create new game interface.
 void createNewGameInterface(Game* game);
 
-//Load a saved game Interface.
-void loadGameInterface();
-
 //Prints-out the sumplete game interface.
 void sumpleteInterface(Game* game);
 

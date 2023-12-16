@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <unistd.h>
 
 //Allocates memory for a new game.
 Game* createNewGame();
@@ -26,6 +25,9 @@ Game* newGame();
 
 //Ends and frees all the allocated memory for a game.
 void endGame(Game** game);
+
+//Loads a game-file.
+bool loadGame(Game* game);
 
 //Prints-out the game time.
 void printGameTime(long game_time_secs);

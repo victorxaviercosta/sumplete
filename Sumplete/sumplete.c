@@ -6,7 +6,7 @@
 int main(){
 	newInterface();
 	printf(GREEN("\n\t\t\t  Bem vindo ao Jogo") BOLD(YELLOW(" SUMPLETE!\n\n")));
-	
+
 	mainMenu();
 	mainMenuInput();
 	

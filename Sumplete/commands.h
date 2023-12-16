@@ -22,4 +22,7 @@ void chooseDifficult(char* difficult, int* boardSize);
 //Reads and interprets the player command.
 void readCommand(Game* game);
 
+//Reads a file name.
+void readFileName(char* file_name, bool* error);
+
 #endif //COMMANDS_H

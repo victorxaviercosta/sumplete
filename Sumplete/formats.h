@@ -1,6 +1,10 @@
 #ifndef FORTMATS_H
 #define FORTMATS_H
 
+#include <unistd.h>
+#define freeze(time) usleep(1000000 * time);
+
+
 //Needed macros for the game.
 #define MAX_NAME_SIZE 21
 #define MAX_COMMAND_SIZE 11 
@@ -80,6 +84,7 @@
 #define BOARD_CREATION_FAIL "NÃO FOI POSSÍVEL CRIAR O TABULEIRO!"
 #define INVALID_INDEXES_ERROR "INDICES INVÁLIDOS!"
 #define INVALID_FILE_EXTENTION_ERROR "A EXTENÇÃO DO ARQUIVO DEVE SER .txt!"
+#define UNABLE_TO_OPEN_FILE_ERROR "NÃO FOI POSSÍVEL ABRIR O ARQUIVO!"
 
 //Prints-out the specified error message.
 #define printError(error_name) printf(BOLD(RED("\n\t\t\t\t %s\n\n")), error_name)
