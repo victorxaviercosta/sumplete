@@ -84,15 +84,17 @@
 #define BOARD_CREATION_FAIL "NÃO FOI POSSÍVEL CRIAR O TABULEIRO!"
 #define INVALID_INDEXES_ERROR "INDICES INVÁLIDOS!"
 #define INVALID_FILE_EXTENTION_ERROR "A EXTENÇÃO DO ARQUIVO DEVE SER .txt!"
+#define UNABLE_TO_SAVE_FILE_ERROR "NÃO FOI POSSÍVEL SALVAR O ARQUIVO!"
 #define UNABLE_TO_OPEN_FILE_ERROR "NÃO FOI POSSÍVEL ABRIR O ARQUIVO!"
+#define NO_CURRENT_GAME_AVALIABLE "NÃO HÁ UM JOGO ATUAL DISPONÍVEL!"
 
 //Prints-out the specified error message.
-#define printError(error_name) printf(BOLD(RED("\n\t\t\t\t %s\n\n")), error_name)
+#define printError(error_name) printf(BOLD(RED("\n\t\t\t %s\n\n")), error_name)
 
 //Success macros definition
 #define FILE_SUCCESSFULLY_SAVED "ARQUIVO GRAVADO COM SUCESSO!"
 
 //Prints-out the specified success message.
-#define printSuccess(success_name) printf(BOLD(GREEN("\n\t\t\t\t %s\n\n")), success_name);
+#define printSuccess(success_name) printf(BOLD(GREEN("\n\t\t\t %s\n\n")), success_name);
 
 #endif //FORMATS_H

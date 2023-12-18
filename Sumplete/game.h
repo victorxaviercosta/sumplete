@@ -18,7 +18,10 @@ typedef struct{
     Board* board;
     Board* playerBoard;
 
-    long game_time;
+    long int game_time;
+    long int starting_time;
+
+    bool playing;
 } Game;
 
 #endif //GAME_H

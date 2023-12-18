@@ -2,45 +2,58 @@
 
 //Reads and interprets the main menu input.
 //Also defines the flux of the aplication depending on the user descisions.
-void mainMenuInput(){
+int mainMenuInput(){
     bool error = false;
-    int op;
+    int op = -1;
+    char file_name[MAX_NAME_SIZE];
     Game* game;
 
-    do{
-        if(error){
-            gotoxy(16, 0);
-            printError(INVALID_OPTION_ERROR);
-        } else{
-            printf("\n");
-        }
-        
+    do{ 
         gotoxy(18, 0); clearLine;
         printf(CYAN("\tEscolha uma opção: "));
-        gotoxy(18, 28);
         scanf("%d", &op);
         bufferClear();
 
+        gotoxy(17, 0); clearLine;
         error = false;
+        gotoxy(19, 0);
+
         switch(op){
             case 0:
+                remove("default_unfinished_game.txt");
                 break;
 
             case 1:
                 game = newGame();
                 sumplete(game);
                 endGame(&game);
+                return 1;
                 break;
 
             case 2:
-                if(loadGame(game)){
-                    sumplete(game);
-                    endGame(&game);
+                if(readFileName(file_name)){
+                    if(loadGame(&game, file_name)){
+                        sumplete(game);
+                        endGame(&game);
+                    } else{
+                        printError(UNABLE_TO_OPEN_FILE_ERROR);
+                        freeze(2);
+                    }
                 }
+                return 1;
                 break;
 
             case 3:
-
+                if(loadGame(&game, "default_unfinished_game.txt")){
+                    sumplete(game);
+                    endGame(&game);
+                } else{
+                    gotoxy(20, 0); clearLine;
+                    gotoxy(16, 0);
+                    printError(NO_CURRENT_GAME_AVALIABLE);
+                    freeze(2);
+                }
+                return 1;
                 break;
 
             case 4:
@@ -50,8 +63,55 @@ void mainMenuInput(){
             default:
                 error = true;
         }
+        if(error){
+            gotoxy(16, 0);
+            printError(INVALID_OPTION_ERROR);
+        }
         
     } while(error);
+    return 0;
+}
+
+
+//Reads a file name.
+ bool readFileName(char* file_name){
+    bool error = false;
+    char yn;
+    do{
+        error = false;
+        newInterface();
+        printf(BOLD(YELLOW("\t\t CARREGAR JOGO SALVO\n\n")));
+        
+        printf(CYAN("\n\tDigite o nome do arquivo: "));
+        scanf("%s", file_name);
+        bufferClear();
+        validateFileName(file_name, &error);
+        if(error){
+            printError(INVALID_FILE_EXTENTION_ERROR);
+        }
+
+        if(error){
+            printf(CYAN("\tDeseja tentar novamente? [s/n]: "));
+            scanf("%c", &yn);
+            bufferClear();
+            if(yn == 'n')
+                return false;
+        }
+    }while(error);
+    return true;
+}
+
+//Validate a file name (veryfies if it's extention is .txt).
+void validateFileName(char* file_name, bool* error){
+    int tam = strlen(file_name);
+    char file_extention[4];
+    file_extention[0] = file_name[tam - 4];
+    file_extention[1] = file_name[tam - 3];
+    file_extention[2] = file_name[tam - 2];
+    file_extention[3] = file_name[tam - 1];
+
+    if(strcmp(file_extention, ".txt"))
+        *error = true;
 }
 
 //Reads the player name.
@@ -149,20 +209,6 @@ void chooseDifficult(char* difficult, int* boardSize){
             IN-GAME COMMANDS
 ==========================================*/
 
-void validateFileName(char* file_name, bool* error){
-    int tam = strlen(file_name);
-    char file_extention[4];
-    file_extention[0] = file_name[tam - 4];
-    file_extention[1] = file_name[tam - 3];
-    file_extention[2] = file_name[tam - 2];
-    file_extention[3] = file_name[tam - 1];
-
-    if(strcmp(file_extention, ".txt"))
-        *error = true;
-}
-
-
-
 void command_keep(Game* game, bool* error){
     int indexes;
     scanf("%d", &indexes);
@@ -207,87 +253,26 @@ void command_solve(Game* game){
 
 }
 
-void command_save(Game* game, bool* error){
+void command_save(Game* game, bool* error, int* id){
     char file_name[MAX_NAME_SIZE];
     scanf("%s", file_name);
     bufferClear();
     validateFileName(file_name, error);
     if(*error){
+        *id = 1;
         return;
     }
 
-    //Writing a game file.
-    FILE *file = fopen(file_name, "w");
-    if(file == NULL){
+    if(!saveGame(game, file_name)){
         *error = true;
+        *id = 2;
         return;
     }
-    printf("Oi\n");
-    fflush(stdout);
-    freeze(2);
-
-    //Writing the game size.
-    fprintf(file, "%d\n", game->size);
-
-    //Writing the game matrix.
-    for(int i = 0; i < game->size; i++){
-        for(int j = 0; j < game->size; j++){
-            fprintf(file, "%d ", game->board->matrix[i][j]);
-        }
-        fprintf(file, "\n");
-    }
-
-    //Writing the rows sum.
-    for(int i = 0; i < game->size; i++){
-        fprintf(file, "%d ", game->board->r_sum[i]);
-    }
-    fprintf(file, "\n");
-
-    //Writing the columns sum.
-    for(int j = 0; j < game->size; j++){
-        fprintf(file, "%d ", game->board->c_sum[j]);
-    }
-    fprintf(file, "\n");
-
-    //Counting the number of "keeps" and "removes".
-    int n_keep, n_remove;
-    countKeepsAndRemoves(game->playerBoard, game->size, &n_keep, &n_remove);
-
-    //Writing the number of marks to keep.
-    fprintf(file, "%d\n", n_keep);
-
-    //Writing the marks to keep coordenates.
-    for(int i = 0; i < game->size; i++){
-        for(int j = 0; j < game->size; j++){
-            if(game->playerBoard->marked[i][j] == 1){
-                fprintf(file, "%d %d\n", i+1, j+1);
-            }
-        }
-    }
-
-    //Writing the number of marks to remove.
-    fprintf(file, "%d\n", n_remove);
-
-    //Writing the marks to remove coordenates.
-    for(int i = 0; i < game->size; i++){
-        for(int j = 0; j < game->size; j++){
-            if(game->playerBoard->marked[i][j] == 0){
-                fprintf(file, "%d %d\n", i+1, j+1);
-            }
-        }
-    }
-
-    //Writing the player name.
-    fprintf(file, "%s\n", game->player.name);
-
-    //Writing the played time.
-    fprintf(file, "%ld", game->game_time);
-
-    fclose(file);
 }
 
 void command_back(Game* game){
-
+    saveGame(game, "default_unfinished_game.txt");
+    game->playing = false;
 }
 
 //Reads and interprets the in-game player command.
@@ -295,24 +280,26 @@ void readCommand(Game* game){
     bool error = false;
     int position = 11 + (2 * game->size) + 5;
     char* command = (char*) malloc(MAX_COMMAND_SIZE * sizeof(char));
+    int id;
     do{
         error = false;
-        gotoxy(position-1, 0); clearLine;
-        gotoxy(position, 0); clearLine;
+        
+        gotoxy(position + 1, 0); clearLine;
+        gotoxy(position, 0);
         printf(CYAN("\n\t%s, digite o comando: "), game->player.name);
         scanf("%s", command);
 
         if(!strcmp(command, "manter")){
             command_keep(game, &error);
             if(error){
-                gotoxy(position-1, 0);
+                gotoxy(position - 1, 0);
                 printError(INVALID_INDEXES_ERROR);
             }
 
         }else if(!strcmp(command, "remover")){
             command_remove(game, &error);
             if(error){
-                gotoxy(position-1, 0);
+                gotoxy(position - 1, 0);
                 printError(INVALID_INDEXES_ERROR);
             }
 
@@ -323,13 +310,17 @@ void readCommand(Game* game){
             command_solve(game);
 
         }else if(!strcmp(command, "salvar")){
-            command_save(game, &error);
+            id = 0;
+            command_save(game, &error, &id);
             if(error){
-                gotoxy(position-1, 0);
-                printError(INVALID_FILE_EXTENTION_ERROR);
+                gotoxy(position - 1, 0);
+                if(id == 1)
+                    printError(INVALID_FILE_EXTENTION_ERROR);
+                else if (id == 2)
+                    printError(UNABLE_TO_SAVE_FILE_ERROR);
                 freeze(2);
             } else{
-                gotoxy(position-1, 0);
+                gotoxy(position - 1, 0);
                 printSuccess(FILE_SUCCESSFULLY_SAVED);
                 freeze(2);
             }
@@ -338,23 +329,12 @@ void readCommand(Game* game){
             command_back(game);
 
         }else{
+            //bufferClear();
             error = true;
-            gotoxy(position-1, 0);
+            gotoxy(position - 1, 0);
             printError(INVALID_COMMAND_ERROR);
         }
     } while(error);
 
     free(command);
-}
-
-//Reads a file name.
-void readFileName(char* file_name, bool* error){
-    *error = false;
-    printf(CYAN("\n\tDigite o nome do arquivo: "));
-    scanf("%s", file_name);
-    bufferClear();
-    validateFileName(file_name, error);
-    if(*error){
-        printError(INVALID_FILE_EXTENTION_ERROR);
-    }
 }

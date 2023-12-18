@@ -26,8 +26,11 @@ Game* newGame();
 //Ends and frees all the allocated memory for a game.
 void endGame(Game** game);
 
+//Saves a game file.
+bool saveGame(Game* game, char* file_name);
+
 //Loads a game-file.
-bool loadGame(Game* game);
+bool loadGame(Game** game, char* file_name);
 
 //Prints-out the game time.
 void printGameTime(long game_time_secs);
