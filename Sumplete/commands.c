@@ -57,7 +57,7 @@ int mainMenuInput(){
                 break;
 
             case 4:
-                //showRanking();
+                showRanking();
                 break;
 
             default:
