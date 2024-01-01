@@ -36,14 +36,14 @@ void readRanking(Ranking* ranking){
         position = ranking->n_sizes - 1;
         //Reading the player name.
         fgetc(file);    
-        fgets(ranking->names[position] [ranking->n_players[position]], MAX_NAME_SIZE, file);
-        removeBLChar(ranking->names[position] [ranking->n_players[position]]);
+        fgets(ranking->players[position][ranking->n_players[position]].name, MAX_NAME_SIZE, file);
+        removeBLChar(ranking->players[position][ranking->n_players[position]].name);
 
         fscanf(file, "%s", string);
         fscanf(file, "%s", aux);
 
         //Reding the player time.
-        fscanf(file, "%ld", &ranking->times[position][ranking->n_players[position]]);
+        fscanf(file, "%ld", &ranking->players[position][ranking->n_players[position]].time);
         ranking->n_players[position]++;
     }
 
@@ -58,8 +58,8 @@ void writeRanking(char* file_name, Ranking* ranking){
         fprintf(file, "size = %d\n", ranking->sizes[i]);
         
         for(int j = 0; j < ranking->n_players[i]; j++){
-            fprintf(file, "player%d = %s\n", j+1, ranking->names[i][j]);
-            fprintf(file, "time%d = %ld", j+1, ranking->times[i][j]);
+            fprintf(file, "player%d = %s\n", j+1, ranking->players[i][j].name);
+            fprintf(file, "time%d = %ld", j+1, ranking->players[i][j].time);
             if(i < ranking->n_sizes - 1)
                 fprintf(file, "\n");    
         }
@@ -67,13 +67,44 @@ void writeRanking(char* file_name, Ranking* ranking){
         if(i < ranking->n_sizes - 1)
             fprintf(file, "\n");
     }
+
+    fclose(file);
 }
 
 //Verifies if the current player time is able to enter the rank.
-bool verifyRanking(Ranking* ranking, int size, long int time){
-    for(int i = 0)
+//Retruns the rank position or 0 if it isn't albe to enter the rank.
+int verifyRanking(Ranking* ranking, int size, Player player){
+    int position = 0;
+
+    for(int i = 0; i < ranking->n_sizes; i++){
+        if(ranking->sizes[i] == size){
+            size = i;
+            break;
+        }
+    }
+
+    for(int i = 0; i < ranking->n_players[size]; i++){
+        if(player.time < ranking->players[size][i].time){
+            for(int j = ranking->n_players[size]-1; j >= i+1; j--){
+                ranking->players[size][j] = ranking->players[size][j-1];
+            }
+            ranking->players[size][i] = player;
+            if(ranking->n_players[size] < MAX_PLAYERS_PER_SIZE)
+                ranking->n_players[size]++;
+            position = i+1;
+            return position;
+        }
+    }
+
+    if(ranking->n_players[size] < MAX_PLAYERS_PER_SIZE){
+        ranking->players[size][ranking->n_players[size]] = player;
+        ranking->n_players[size]++;
+        position = ranking->n_players[size];
+    }
+    return position;
 }
 
+//Prints-out the current game rank.
 void showRanking(){
     Time time;
     Ranking* ranking = createRanking();
@@ -100,10 +131,10 @@ void showRanking(){
 			printf("%dx%d" "\t\t\t\t\t\t" H_TAB_VER "\n",  ranking->sizes[i], ranking->sizes[i]);
             printf("\t" H_TAB_VER "\t\t\t\t\t\t\t\t" H_TAB_VER "\n");
 			for(int j = 0; j < ranking->n_players[i]; j++){
-				time = convertTime(ranking->times[i][j]);
+				time = convertTime(ranking->players[i][j].time);
 				printf("\t" H_TAB_VER BOLD(YELLOW("     #%d")), j+1); 
 				printf(" - ");
-				printf(BOLD(GREEN("%-30s ")), ranking->names[i][j]);
+				printf(BOLD(GREEN("%-30s ")), ranking->players[i][j].name);
 				printf(BOLD(BLUE("  Tempo: ")));
 				printf("%02d:%02d:%02d \t" H_TAB_VER "\n", time.h, time.min, time.sec);
 			}

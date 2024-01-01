@@ -14,8 +14,7 @@ typedef struct {
     int n_sizes;
     int sizes[MAX_SIZES];
     int n_players[MAX_SIZES];
-    char names[MAX_SIZES][MAX_PLAYERS_PER_SIZE][MAX_NAME_SIZE];
-    long int times[MAX_SIZES][MAX_PLAYERS_PER_SIZE];
+    Player players[MAX_SIZES][MAX_PLAYERS_PER_SIZE];
 } Ranking;
 
 //Allocates and initializes memmory for a Ranking structure.
@@ -27,7 +26,14 @@ void freeRanking(Ranking** ranking);
 //Reads a .ini file contanning the game ranking information.
 void readRanking(Ranking* ranking);
 
+//Writes the ranking information in the .ini file (updating it).
+void writeRanking(char* file_name, Ranking* ranking);
 
+//Verifies if the current player time is able to enter the rank.
+//Retruns the rank position or 0 if it isn't albe to enter the rank.
+int verifyRanking(Ranking* ranking, int size, Player player);
 
+//Prints-out the current game rank.
+void showRanking();
 
 #endif //RANKING_H

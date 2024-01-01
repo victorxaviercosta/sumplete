@@ -5,6 +5,7 @@
 #include "tools.h"
 #include "interfaces.h"
 #include "board.h"
+#include "ranking.h"
 
 //Reads and interprets the main menu input.
 //Also defines the flux of the aplication depending on the user descisions.

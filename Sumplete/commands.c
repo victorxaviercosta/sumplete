@@ -28,7 +28,6 @@ int mainMenuInput(){
                 sumplete(game);
                 endGame(&game);
                 return 1;
-                break;
 
             case 2:
                 if(readFileName(file_name)){
@@ -41,7 +40,6 @@ int mainMenuInput(){
                     }
                 }
                 return 1;
-                break;
 
             case 3:
                 if(loadGame(&game, "default_unfinished_game.txt")){
@@ -54,11 +52,10 @@ int mainMenuInput(){
                     freeze(2);
                 }
                 return 1;
-                break;
 
             case 4:
                 showRanking();
-                break;
+                return 1;
 
             default:
                 error = true;

@@ -238,8 +238,19 @@ void sumplete(Game* game){
     game->game_time = time(NULL) - game->game_time + game->starting_time;
     
     char enter;
+    int rank_position;
     if(victory){
         finalizeGame(game);
+        
+        Ranking* ranking = createRanking();
+        readRanking(ranking);
+        game->player.time = game->game_time;
+        rank_position = verifyRanking(ranking, game->size, game->player);
+        writeRanking("sumplete.ini", ranking);
+        if(rank_position){
+            printf(BOLD(GREEN("\n\tVOCÊ ESTÁ NA POSIÇÃO ")) BOLD(YELLOW("#%d")) BOLD(GREEN(" DO RANKING!\n")), rank_position);
+        }
+
         printf(CYAN("\n\tPrescione ENTER para voltar ao menu."));
         scanf("%c", &enter);
     }
