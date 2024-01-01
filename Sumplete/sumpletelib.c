@@ -237,10 +237,10 @@ void sumplete(Game* game){
 
     game->game_time = time(NULL) - game->game_time + game->starting_time;
     
-    char c;
+    char enter;
     if(victory){
         finalizeGame(game);
         printf(CYAN("\n\tPrescione ENTER para voltar ao menu."));
-        scanf("%c", &c);
+        scanf("%c", &enter);
     }
 }

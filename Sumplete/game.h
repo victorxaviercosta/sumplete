@@ -3,11 +3,7 @@
 
 #include "formats.h"
 #include "board.h"
-
-//Contains player infomation.
-typedef struct{
-    char name[MAX_NAME_SIZE];
-} Player;
+#include "player.h"
 
 //Contains game information.
 typedef struct{
