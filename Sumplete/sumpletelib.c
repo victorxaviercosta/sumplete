@@ -196,6 +196,10 @@ bool loadGame(Game** game, char* file_name){
 }
 
 
+void solveGame(){
+    
+}
+
 
 //Prints-out the game time.
 void printGameTime(long int game_time_secs){

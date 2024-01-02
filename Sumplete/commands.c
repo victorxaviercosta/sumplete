@@ -54,6 +54,7 @@ int mainMenuInput(){
                 return 1;
 
             case 4:
+                newInterface();
                 showRanking();
                 return 1;
 

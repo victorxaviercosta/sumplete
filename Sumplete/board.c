@@ -2,7 +2,7 @@
 
 #include "board.h"
 
-//Allocates mamoery for a new sumplete board.
+//Allocates memory for a new sumplete board.
 Board* createNewBoard(int size){
     Board* newBoard= (Board*) malloc(sizeof(Board));
     newBoard->matrix = createMatrix(size, size);

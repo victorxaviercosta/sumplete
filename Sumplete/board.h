@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 //Contains board information.
 typedef struct{
@@ -16,7 +17,7 @@ typedef struct{
     int** marked;
 } Board;
 
-//Allocates mamoery for a new sumplete board.
+//Allocates memory for a new sumplete board.
 Board* createNewBoard(int size);
 
 //Frees the allocated memory for a board.
