@@ -87,6 +87,7 @@
 #define UNABLE_TO_SAVE_FILE_ERROR "NÃO FOI POSSÍVEL SALVAR O ARQUIVO!"
 #define UNABLE_TO_OPEN_FILE_ERROR "NÃO FOI POSSÍVEL ABRIR O ARQUIVO!"
 #define NO_CURRENT_GAME_AVALIABLE "NÃO HÁ UM JOGO ATUAL DISPONÍVEL!"
+#define NO_MORE_HINTS "NÃO HÁ MAIS DICAS!"
 
 //Prints-out the specified error message.
 #define printError(error_name) printf(BOLD(RED("\n\t\t\t %s\n\n")), error_name)

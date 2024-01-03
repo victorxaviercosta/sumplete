@@ -1,5 +1,9 @@
 #include "commands.h"
 
+/*========================================
+            MENU COMMANDS
+==========================================*/
+
 //Reads and interprets the main menu input.
 //Also defines the flux of the aplication depending on the user descisions.
 int mainMenuInput(){
@@ -9,14 +13,14 @@ int mainMenuInput(){
     Game* game;
 
     do{ 
-        gotoxy(18, 0); clearLine;
+        gotoxy(28, 0); clearLine;
         printf(CYAN("\tEscolha uma opção: "));
         scanf("%d", &op);
         bufferClear();
 
-        gotoxy(17, 0); clearLine;
+        gotoxy(27, 0); clearLine;
         error = false;
-        gotoxy(19, 0);
+        gotoxy(29, 0);
 
         switch(op){
             case 0:
@@ -46,8 +50,8 @@ int mainMenuInput(){
                     sumplete(game);
                     endGame(&game);
                 } else{
-                    gotoxy(20, 0); clearLine;
-                    gotoxy(16, 0);
+                    gotoxy(30, 0); clearLine;
+                    gotoxy(26, 0);
                     printError(NO_CURRENT_GAME_AVALIABLE);
                     freeze(2);
                 }
@@ -55,6 +59,7 @@ int mainMenuInput(){
 
             case 4:
                 newInterface();
+                printLogo();
                 showRanking();
                 return 1;
 
@@ -62,7 +67,7 @@ int mainMenuInput(){
                 error = true;
         }
         if(error){
-            gotoxy(16, 0);
+            gotoxy(26, 0);
             printError(INVALID_OPTION_ERROR);
         }
         
@@ -126,20 +131,20 @@ void readBoardSize(int* size){
 
     do{
         if(error){
-            gotoxy(12, 0);
+            gotoxy(22, 0);
             printError(INVALID_SIZE_ERROR);
 
         } else{
             printf("\n");
         }
-        gotoxy(14, 0); clearLine;
-        gotoxy(13, 0);
+        gotoxy(24, 0); clearLine;
+        gotoxy(23, 0);
         printf(CYAN("\n\tDigite o tamanho do tabuleiro(3 a 9): "));
         scanf("%d", size);
         bufferClear();
         printf("\n");
 
-        gotoxy(13, 0); clearLine;
+        gotoxy(23, 0); clearLine;
         error = false;
         if(*size < 3 || *size > 9){
             error = true;
@@ -158,19 +163,19 @@ void chooseDifficult(char* difficult, int* boardSize){
         printDifficultInterface('M');
         do{
             if(error){
-                gotoxy(19, 0);
+                gotoxy(29, 0);
                 printError(INVALID_DIFFICULT_ERROR);
             } else{
                 printf("\n");
             }
-            gotoxy(21, 0); clearLine;
-            gotoxy(20, 0);
+            gotoxy(31, 0); clearLine;
+            gotoxy(30, 0);
             printf(CYAN("\n\tDificuldade: "));
             scanf("%c", difficult);
             bufferClear();
 
-            gotoxy(20, 0); clearLine;
-            gotoxy(22, 0);
+            gotoxy(30, 0); clearLine;
+            gotoxy(32, 0);
             error = false;
             if(*difficult != 'F' && *difficult != 'M'){
                 error = true;
@@ -181,19 +186,19 @@ void chooseDifficult(char* difficult, int* boardSize){
         printDifficultInterface('D');
         do{
             if(error){
-                gotoxy(20, 0);
+                gotoxy(30, 0);
                 printError(INVALID_DIFFICULT_ERROR);
             } else{
                 printf("\n");
             }
-            gotoxy(22, 0); clearLine;
-            gotoxy(21, 0);
+            gotoxy(32, 0); clearLine;
+            gotoxy(31, 0);
             printf(CYAN("\n\tDificuldade: "));
             scanf("%c", difficult);
             bufferClear();
 
-            gotoxy(21, 0); clearLine;
-            gotoxy(23, 0);
+            gotoxy(31, 0); clearLine;
+            gotoxy(33, 0);
             error = false;
             if(*difficult != 'F' && *difficult != 'M' && *difficult != 'D')
                 error = true;
@@ -243,12 +248,49 @@ void command_remove(Game* game, bool* error){
     }
 }
 
-void command_hint(Game* game){
+void command_hint(Game* game, bool* error){
+    int nMarks = 0;
+    int nMatches = 0;
+    int r, c;
+    bool ok = false;
+    for(int i = 0; i < game->size; i++){
+        for(int j = 0; j < game->size; j++){
+            if(game->board->marked[i][j]){
+                nMarks++;
+                if(game->playerBoard->marked[i][j] == 1)
+                    nMatches++;
+            }
+        }
+    }
 
+    if(nMarks == nMatches){
+        *error = true;
+        return;
+    }else{
+        while(!ok){
+            r = rand() % game->size;
+            c = rand() % game->size;
+            if(game->board->marked[r][c] && game->playerBoard->marked[r][c] != 1){
+                game->playerBoard->marked[r][c] = 1;
+                ok = true;
+            }
+        }
+    }
 }
 
 void command_solve(Game* game){
-
+    initialzeArray(game->playerBoard->r_sum, game->size);
+    initialzeArray(game->playerBoard->c_sum, game->size);
+    for(int i = 0; i < game->size; i++){
+        for(int j = 0; j < game->size; j++){
+            game->playerBoard->marked[i][j] = game->board->marked[i][j];
+            if(game->playerBoard->marked[i][j]){
+                game->playerBoard->r_sum[i] += game->board->matrix[i][j];
+                game->playerBoard->c_sum[j] += game->board->matrix[i][j];
+            }
+        }
+    }
+    game->playerBoard->matrix[0][0] = 1; //Sinalizes the game was automatically solved.
 }
 
 void command_save(Game* game, bool* error, int* id){
@@ -276,13 +318,16 @@ void command_back(Game* game){
 //Reads and interprets the in-game player command.
 void readCommand(Game* game){
     bool error = false;
-    int position = 11 + (2 * game->size) + 5;
+    int position = 11 + (2 * game->size) + 15;
+    int positionP1 = position + 1;
+    int positionM1 = position - 1;
     char* command = (char*) malloc(MAX_COMMAND_SIZE * sizeof(char));
     int id;
     do{
+        fflush(stdout);
         error = false;
         
-        gotoxy(position + 1, 0); clearLine;
+        gotoxy(positionP1, 0); clearLine;
         gotoxy(position, 0);
         printf(CYAN("\n\t%s, digite o comando: "), game->player.name);
         scanf("%s", command);
@@ -290,35 +335,40 @@ void readCommand(Game* game){
         if(!strcmp(command, "manter")){
             command_keep(game, &error);
             if(error){
-                gotoxy(position - 1, 0);
+                gotoxy(positionM1, 0);
                 printError(INVALID_INDEXES_ERROR);
             }
 
         }else if(!strcmp(command, "remover")){
             command_remove(game, &error);
             if(error){
-                gotoxy(position - 1, 0);
+                gotoxy(positionM1, 0);
                 printError(INVALID_INDEXES_ERROR);
             }
 
         }else if(!strcmp(command, "dica")){
-            command_hint(game);
+            command_hint(game, &error);
+            if(error){
+                gotoxy(positionM1, 0);
+                printError(NO_MORE_HINTS);
+            }
 
         }else if(!strcmp(command, "resolver")){
             command_solve(game);
+            bufferClear();
 
         }else if(!strcmp(command, "salvar")){
             id = 0;
             command_save(game, &error, &id);
             if(error){
-                gotoxy(position - 1, 0);
+                gotoxy(positionM1, 0);
                 if(id == 1)
                     printError(INVALID_FILE_EXTENTION_ERROR);
                 else if (id == 2)
                     printError(UNABLE_TO_SAVE_FILE_ERROR);
                 freeze(2);
             } else{
-                gotoxy(position - 1, 0);
+                gotoxy(positionM1, 0);
                 printSuccess(FILE_SUCCESSFULLY_SAVED);
                 freeze(2);
             }
@@ -327,9 +377,9 @@ void readCommand(Game* game){
             command_back(game);
 
         }else{
-            //bufferClear();
+            bufferClear();
             error = true;
-            gotoxy(position - 1, 0);
+            gotoxy(positionM1, 0);
             printError(INVALID_COMMAND_ERROR);
         }
     } while(error);

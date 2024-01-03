@@ -187,24 +187,54 @@ bool loadGame(Game** game, char* file_name){
     //Reading the game time.
     fscanf(file, "%ld", &(*game)->starting_time);
 
+    //Finding the game solution.
+    solve((*game)->board, (*game)->size);
+
     //Checking the game difficult (because it is not allowed to store it).
-    //provisory setting difficult to easy
-    (*game)->difficult = 'F';
+    identifyGameDifficult(*game);
 
     fclose(file);
     return true;
 }
 
+//Identifies the current game difficult.
+//Only usefull for the load game process.
+void identifyGameDifficult(Game* game){
+    if(game->size < 5){
+        game->difficult = 'F';
 
-void solveGame(){
-    
+    } else {
+        if(game->size > 6){
+            for(int i = 0; i < game->size; i++){
+                for(int j = 0; j < game->size; j++){
+                    if(game->board->matrix[i][j] <= 0){
+                        game->difficult = 'D';
+                        return;
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < game->size; i++){
+            for(int j = 0; j < game->size; j++){
+                if(game->board->r_sum[i] == 0 || game->board->c_sum[j] == 0){
+                    game->difficult = 'F';
+                    return;
+                }
+                if(game->board->r_sum[i] == game->playerBoard->r_sum[i] || game->board->c_sum[j] == game->playerBoard->c_sum[j]){
+                    game->difficult = 'F';
+                    return;
+                }
+            }
+        }
+    }
+    game->difficult = 'M';
 }
-
 
 //Prints-out the game time.
 void printGameTime(long int game_time_secs){
     Time time = convertTime(game_time_secs);
-    printf(BOLD(BLUE("\n\tTempo de jogo: ")));
+    printLetterByLetter(BOLD(BLUE("\n\tTempo de jogo: ")));
     printTime(time);
     printf("\n");
 }
@@ -212,14 +242,15 @@ void printGameTime(long int game_time_secs){
 //Finalize the game with an final print victory.
 void finalizeGame(Game* game){
     finalizeBoard(game->playerBoard, game->size);
+
     newInterface();
     printGameHeader(game);
     printBoard(game->board, game->size, game->playerBoard);
-    freeze(1);
+
+    if(game->playerBoard->matrix[0][0] != 1)
+        printLetterByLetter(BOLD(GREEN("\n\t\t\tVITÓRIA!!!\n")));
+
     printGameTime(game->game_time);
-    printf(BOLD(GREEN("\n\t\t\tVITÓRIA!!!\n")));
-    fflush(stdout);
-    freeze(1);
 }
 
 //The core function where the game is executed.
@@ -233,7 +264,7 @@ void sumplete(Game* game){
         sumpleteInterface(game);
         readCommand(game);
 
-        if(verifyVictory(game)){
+        if(verifyVictory(game)){ 
             victory = true;
             game->playing = false;
         }
@@ -243,19 +274,25 @@ void sumplete(Game* game){
     
     char enter;
     int rank_position;
+    Ranking* ranking = createRanking();
+
     if(victory){
         finalizeGame(game);
         
-        Ranking* ranking = createRanking();
-        readRanking(ranking);
-        game->player.time = game->game_time;
-        rank_position = verifyRanking(ranking, game->size, game->player);
-        writeRanking("sumplete.ini", ranking);
-        if(rank_position){
-            printf(BOLD(GREEN("\n\tVOCÊ ESTÁ NA POSIÇÃO ")) BOLD(YELLOW("#%d")) BOLD(GREEN(" DO RANKING!\n")), rank_position);
+        if(game->playerBoard->matrix[0][0] != 1){
+            readRanking(ranking);
+            game->player.time = game->game_time;
+            rank_position = verifyRanking(ranking, game->size, game->player);
+            writeRanking("sumplete.ini", ranking);
+            if(rank_position){
+                printLetterByLetter(BOLD(GREEN("\n\tVOCÊ ESTÁ NA POSIÇÃO ")));
+                printf(BOLD(YELLOW("#%d")), rank_position);
+                printLetterByLetter(BOLD(GREEN(" DO RANKING!\n")));
+            }
         }
 
         printf(CYAN("\n\tPrescione ENTER para voltar ao menu."));
         scanf("%c", &enter);
     }
+    freeRanking(&ranking);
 }

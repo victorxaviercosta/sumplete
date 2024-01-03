@@ -14,6 +14,18 @@
 //Function for setting up a new Interface of the game
 void newInterface();
 
+//Prints-out the sumplete logo.
+void printLogo();
+
+//Prints-out the given string letter by letter.
+void printLetterByLetter(char* string);
+
+//Plays the initial animation.
+void initialAnimation();
+
+//Plays the final animation.
+void finalAnimation();
+
 //Function that prints-out the main menu interface.
 void mainMenu();
 

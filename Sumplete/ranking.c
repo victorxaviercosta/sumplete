@@ -132,8 +132,6 @@ void showRanking(){
     Ranking* ranking = createRanking();
     readRanking(ranking);
 
-    //newInterface();
-
 	if(ranking->n_sizes > 0){
         printf("\t" H_TAB_TL);
         for(int i = 0; i < 63; i++)

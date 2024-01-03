@@ -9,9 +9,51 @@ void newInterface(){
     printf("\n\n\n");
 }
 
+//Prints-out the sumplete logo.
+void printLogo(){
+    printf("\n");
+    printf(BOLD(YELLOW("\t\t   _____                       _      _       \n")));
+	printf(BOLD(YELLOW("\t\t  / ____|                     | |    | |      \n")));
+	printf(BOLD(YELLOW("\t\t | (___  _   _ _ __ ___  _ __ | | ___| |_ ___ \n")));
+	printf(BOLD(YELLOW("\t\t  \\___ \\| | | | '_ ` _ \\| '_ \\| |/ _ \\ __/ _ \\\n")));
+	printf(BOLD(YELLOW("\t\t  ____) | |_| | | | | | | |_) | |  __/ ||  __/\n")));
+	printf(BOLD(YELLOW("\t\t |_____/ \\__,_|_| |_| |_| .__/|_|\\___|\\__\\___|\n")));
+	printf(BOLD(YELLOW("\t\t                        | |                   \n")));
+	printf(BOLD(YELLOW("\t\t                        |_|                   \n")));
+    printf("\n");
+}
+
+//Prints-out the given string letter by letter.
+void printLetterByLetter(char* string){
+    int lenght = strlen(string);
+    for(int i = 0; i < lenght; i++){
+        printf("%c", string[i]);
+        fflush(stdout);
+        freeze(0.05);
+    }
+}
+
+//Plays the initial animation.
+void initialAnimation(){
+    printLetterByLetter(GREEN("\n\t\t\t  Bem vindo ao jogo") BOLD(YELLOW(" SUMPLETE!\n\n")));
+
+	fflush(stdout);
+	freeze(1);
+}
+
+//Plays the final animation.
+void finalAnimation(){
+    printLetterByLetter(GREEN("\n\t\t\t  Obrigado por jogar") BOLD(YELLOW(" SUMPLETE!\n\n")));
+
+	fflush(stdout);
+	freeze(1);
+}
+
 //Function that prints-out the main menu interface.
 void mainMenu(){
     newInterface();
+
+    printLogo();
 
     printf("\n\t" BOLD(YELLOW(H_TAB_TL)));
     for(int i = 0; i < 63; i++){
@@ -38,6 +80,8 @@ void mainMenu(){
 
 //Prints-out a game header.
 void printGameHeader(Game* game){
+    printLogo();
+
     printf("\t" BOLD(YELLOW(H_TAB_TL)));
     for(int i = 0; i < 63; i++)
         printf(BOLD(YELLOW(H_TAB_HOR)));
@@ -81,7 +125,7 @@ void createNewGameInterface(Game* game){
     readBoardSize(&game->size);
     gotoxy(4, 0);
     printGameHeader(game);
-    gotoxy(16, 0);
+    gotoxy(26, 0);
 
     chooseDifficult(&game->difficult, &game->size);
     gotoxy(4, 0);

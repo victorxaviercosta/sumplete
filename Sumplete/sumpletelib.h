@@ -8,6 +8,7 @@
 #include "game.h"
 #include "interfaces.h"
 #include "board.h"
+#include "solver.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,6 +32,9 @@ bool saveGame(Game* game, char* file_name);
 
 //Loads a game-file.
 bool loadGame(Game** game, char* file_name);
+
+//Identifies the current game difficult.
+void identifyGameDifficult(Game* game);
 
 //Prints-out the game time.
 void printGameTime(long game_time_secs);

@@ -5,7 +5,8 @@
 
 int main(){
 	newInterface();
-	printf(GREEN("\n\t\t\t  Bem vindo ao Jogo") BOLD(YELLOW(" SUMPLETE!\n\n")));
+
+	//initialAnimation();
 
 	int procedure = 0;
 	do{
@@ -13,6 +14,7 @@ int main(){
 		procedure = mainMenuInput();
 	} while(procedure != 0);
 	
-	printf(GREEN("\n\t\t\t  Obrigado por jogar") BOLD(YELLOW(" SUMPLETE!\n\n")));
+	finalAnimation();
+	system("clear");
 	return 0;
 }
