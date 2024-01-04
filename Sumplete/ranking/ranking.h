@@ -1,9 +1,9 @@
 #ifndef RANKING_H
 #define RANKING_H
 
-#include "formats.h"
-#include "tools.h"
-#include "interfaces.h"
+#include "../tools/formats.h"
+#include "../tools/tools.h"
+#include "../interface/interfaces.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,7 +27,7 @@ void freeRanking(Ranking** ranking);
 void readRanking(Ranking* ranking);
 
 //Writes the ranking information in the .ini file (updating it).
-void writeRanking(char* file_name, Ranking* ranking);
+void writeRanking(Ranking* ranking);
 
 //Verifies if the current player time is able to enter the rank.
 //Retruns the rank position or 0 if it isn't albe to enter the rank.

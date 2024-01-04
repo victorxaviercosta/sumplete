@@ -1,8 +1,8 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "tools.h"
-#include "formats.h"
+#include "../tools/tools.h"
+#include "../tools/formats.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

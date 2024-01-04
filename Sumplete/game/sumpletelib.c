@@ -10,6 +10,8 @@ Game* createNewGame(){
     newGame->size = 0;
     newGame->game_time = 0;
     newGame->starting_time = 0;
+    newGame->playerBoard = NULL;
+    newGame->board = NULL;
 
     return newGame;
 }
@@ -36,8 +38,10 @@ Game* newGame(){
 
 //Ends and frees all the allocated memory for a game.
 void endGame(Game** game){
-    deleteBoard(&(*game)->playerBoard, (*game)->size);
-    deleteBoard(&(*game)->board, (*game)->size);
+    if((*game)->playerBoard != NULL)
+        deleteBoard(&(*game)->playerBoard, (*game)->size);
+    if((*game)->board != NULL)
+        deleteBoard(&(*game)->board, (*game)->size);
     deleteGame(game);
 }
 
@@ -50,10 +54,26 @@ bool verifyVictory(Game* game){
     return false;
 }
 
+//Formates the string for open de saves file path.
+char* saveFilePath(char* file_name){
+    int name_size = strlen(file_name);
+    char* file_path = (char*) malloc((name_size + 10) * sizeof(char));
+    strcpy(file_path, "saves/");
+    for(int i = 0; i < name_size; i++){
+        file_path[i + 6] = file_name[i];
+    }
+
+    return file_path;
+}
+
 //Saves a game file.
 bool saveGame(Game* game, char* file_name){
+    char* file_path = saveFilePath(file_name);
+
     //Writing a game file.
-    FILE *file = fopen(file_name, "w");
+    FILE *file = fopen(file_path, "w");
+    free(file_path);
+
     if(file == NULL){
         return false;
     }
@@ -122,11 +142,12 @@ bool saveGame(Game* game, char* file_name){
 
 //Loads a game-file.
 bool loadGame(Game** game, char* file_name){
-    
-    //Allocating memory for a new game.
-    (*game) = createNewGame();
 
-    FILE* file = fopen(file_name, "r");
+    char* file_path = saveFilePath(file_name);
+
+    FILE* file = fopen(file_path, "r");
+    free(file_path);
+
     if(file == NULL){
         return false;
     }
@@ -264,6 +285,10 @@ void sumplete(Game* game){
         sumpleteInterface(game);
         readCommand(game);
 
+        //If this condition is true the player saved the game.
+        if(game->playerBoard->matrix[0][0] == 2)
+            return;
+
         if(verifyVictory(game)){ 
             victory = true;
             game->playing = false;
@@ -283,7 +308,7 @@ void sumplete(Game* game){
             readRanking(ranking);
             game->player.time = game->game_time;
             rank_position = verifyRanking(ranking, game->size, game->player);
-            writeRanking("sumplete.ini", ranking);
+            writeRanking(ranking);
             if(rank_position){
                 printLetterByLetter(BOLD(GREEN("\n\tVOCÊ ESTÁ NA POSIÇÃO ")));
                 printf(BOLD(YELLOW("#%d")), rank_position);

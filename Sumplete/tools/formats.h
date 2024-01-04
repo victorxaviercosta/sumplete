@@ -98,4 +98,12 @@
 //Prints-out the specified success message.
 #define printSuccess(success_name) printf(BOLD(GREEN("\n\t\t\t %s\n\n")), success_name);
 
+//Game splash texts
+#define LETS_SUM "Vamos somar!"
+#define MANY_SUMS "Muitas somas!"
+#define TRY_DIFFICULT_MODE "Experimente o modo difícil!"
+#define ADDING_IS_FUN "Somar é divertido!"
+#define TRY_BEAT_THAT_RECORD "Vamos bater aquele recorde!"
+#define RUMORS "Dizem que Sumplete existia antes do Chat GPT."
+
 #endif //FORMATS_H

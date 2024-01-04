@@ -7,7 +7,7 @@
 //Reads and interprets the main menu input.
 //Also defines the flux of the aplication depending on the user descisions.
 int mainMenuInput(){
-    bool error = false;
+    bool error = false; int id = 0;
     int op = -1;
     char file_name[MAX_NAME_SIZE];
     Game* game;
@@ -18,8 +18,8 @@ int mainMenuInput(){
         scanf("%d", &op);
         bufferClear();
 
+        error = false; id = 0;
         gotoxy(27, 0); clearLine;
-        error = false;
         gotoxy(29, 0);
 
         switch(op){
@@ -35,13 +35,15 @@ int mainMenuInput(){
 
             case 2:
                 if(readFileName(file_name)){
+                    game = createNewGame();
                     if(loadGame(&game, file_name)){
                         sumplete(game);
-                        endGame(&game);
+                        
                     } else{
                         printError(UNABLE_TO_OPEN_FILE_ERROR);
                         freeze(2);
                     }
+                    endGame(&game);
                 }
                 return 1;
 
@@ -50,17 +52,19 @@ int mainMenuInput(){
                     sumplete(game);
                     endGame(&game);
                 } else{
-                    gotoxy(30, 0); clearLine;
-                    gotoxy(26, 0);
-                    printError(NO_CURRENT_GAME_AVALIABLE);
-                    freeze(2);
+                    error = true;
+                    id = 1;
                 }
-                return 1;
+                break;
 
             case 4:
                 newInterface();
                 printLogo();
                 showRanking();
+                return 1;
+            
+            case 5:
+                commandsInterface();
                 return 1;
 
             default:
@@ -68,7 +72,10 @@ int mainMenuInput(){
         }
         if(error){
             gotoxy(26, 0);
-            printError(INVALID_OPTION_ERROR);
+            if(id == 1)
+                printError(NO_CURRENT_GAME_AVALIABLE);
+            else
+                printError(INVALID_OPTION_ERROR);
         }
         
     } while(error);
@@ -83,6 +90,7 @@ int mainMenuInput(){
     do{
         error = false;
         newInterface();
+        printLogo();
         printf(BOLD(YELLOW("\t\t CARREGAR JOGO SALVO\n\n")));
         
         printf(CYAN("\n\tDigite o nome do arquivo: "));
@@ -212,6 +220,11 @@ void chooseDifficult(char* difficult, int* boardSize){
             IN-GAME COMMANDS
 ==========================================*/
 
+void command_commands(){
+    bufferClear();
+    commandsInterface();
+}
+
 void command_keep(Game* game, bool* error){
     int indexes;
     scanf("%d", &indexes);
@@ -271,6 +284,10 @@ void command_hint(Game* game, bool* error){
             r = rand() % game->size;
             c = rand() % game->size;
             if(game->board->marked[r][c] && game->playerBoard->marked[r][c] != 1){
+                if(game->playerBoard->marked[r][c] == 0){
+                    game->playerBoard->r_sum[r] += game->board->matrix[r][c];
+                    game->playerBoard->c_sum[c] += game->board->matrix[r][c];
+                }
                 game->playerBoard->marked[r][c] = 1;
                 ok = true;
             }
@@ -308,6 +325,7 @@ void command_save(Game* game, bool* error, int* id){
         *id = 2;
         return;
     }
+    game->playerBoard->matrix[0][0] = 2; //Sinalizes the game was saved.
 }
 
 void command_back(Game* game){
@@ -332,7 +350,10 @@ void readCommand(Game* game){
         printf(CYAN("\n\t%s, digite o comando: "), game->player.name);
         scanf("%s", command);
 
-        if(!strcmp(command, "manter")){
+        if(!strcmp(command, "comandos")){
+            command_commands();
+
+        }else if(!strcmp(command, "manter")){
             command_keep(game, &error);
             if(error){
                 gotoxy(positionM1, 0);

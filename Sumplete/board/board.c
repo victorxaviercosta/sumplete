@@ -110,6 +110,7 @@ void newBoard(Board* board, int size, char difficult){
 //Creates a new sumplete player board.
 void newPlayerBoard(Board* playerBoard, Board* gameBoard, int size){
     initializeMatrix(playerBoard->marked, size, size, -1);
+    initializeMatrix(playerBoard->matrix, size, size, 0);
     initialzeArray(playerBoard->c_sum, size);
     initialzeArray(playerBoard->r_sum, size);
     for(int i = 0; i < size; i++){

@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "formats.h"
-#include "board.h"
+#include "../tools/formats.h"
+#include "../board/board.h"
 #include "player.h"
 
 //Contains game information.

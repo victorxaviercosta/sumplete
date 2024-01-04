@@ -7,7 +7,10 @@ int main(){
 
 	newInterface();
 
-	//initialAnimation();
+	initialAnimation();
+	char enter;
+	printf(CYAN("\n\t\t\t  Precione ENTER para começar."));
+	scanf("%c", &enter);
 
 	int procedure = 0;
 	do{

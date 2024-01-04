@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "formats.h"
+#include "../tools/formats.h"
 
 //Contains player infomation.
 typedef struct{

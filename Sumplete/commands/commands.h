@@ -1,11 +1,11 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#include "game.h"
-#include "tools.h"
-#include "interfaces.h"
-#include "board.h"
-#include "ranking.h"
+#include "../game/game.h"
+#include "../tools/tools.h"
+#include "../interface/interfaces.h"
+#include "../board/board.h"
+#include "../ranking/ranking.h"
 
 //Reads and interprets the main menu input.
 //Also defines the flux of the aplication depending on the user descisions.

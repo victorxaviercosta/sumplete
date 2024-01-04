@@ -20,10 +20,10 @@ void readRanking(Ranking* ranking){
     char string[MAX_NAME_SIZE], aux[5];
     int size;
 
-    FILE* file = fopen("sumplete.ini", "a");
+    FILE* file = fopen("ranking/sumplete.ini", "a");
     fclose(file);
 
-    file = fopen("sumplete.ini", "r");
+    file = fopen("ranking/sumplete.ini", "r");
 
     fseek(file, 0, SEEK_END);
     int tam = ftell(file);
@@ -61,8 +61,8 @@ void readRanking(Ranking* ranking){
 }
 
 //Writes the ranking information in the .ini file (updating it).
-void writeRanking(char* file_name, Ranking* ranking){
-    FILE* file = fopen(file_name, "w");
+void writeRanking(Ranking* ranking){
+    FILE* file = fopen("ranking/sumplete.ini", "w");
 
     int cont = 0, cont2 = 0;
     for(int i = 0; i < MAX_SIZES; i++){
@@ -155,9 +155,10 @@ void showRanking(){
                     time = convertTime(ranking->players[i][j].time);
                     printf("\t" H_TAB_VER BOLD(YELLOW("     #%d")), j+1); 
                     printf(" - ");
-                    printf(BOLD(GREEN("%-30s ")), ranking->players[i][j].name);
+                    printf(BOLD(GREEN("%-30s ")), ranking->players[i][j].name); 
                     printf(BOLD(BLUE("  Tempo: ")));
                     printf("%02d:%02d:%02d \t" H_TAB_VER "\n", time.h, time.min, time.sec);
+                    fflush(NULL);
                 }
                 printf("\t" H_TAB_VER "\t\t\t\t\t\t\t\t" H_TAB_VER "\n");
             }
