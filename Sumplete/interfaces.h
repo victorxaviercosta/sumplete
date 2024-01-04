@@ -1,6 +1,7 @@
 #ifndef INTERFACES_H
 #define INTERFACES_H
 
+#include "osManager.h"
 #include "formats.h"
 #include "tools.h"
 #include "game.h"

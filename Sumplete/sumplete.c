@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 int main(){
+
 	newInterface();
 
 	//initialAnimation();
@@ -15,6 +16,6 @@ int main(){
 	} while(procedure != 0);
 	
 	finalAnimation();
-	system("clear");
+	clear();
 	return 0;
 }

@@ -3,6 +3,7 @@
 #ifndef SUMPLETELIB_H
 #define SUMPLETELIB_H
 
+#include "osManager.h"
 #include "formats.h"
 #include "tools.h"
 #include "game.h"

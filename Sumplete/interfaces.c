@@ -5,7 +5,7 @@
 //Function for setting up a new Interface of the game
 void newInterface(){
     gotoxy(0,0);
-    system("clear");
+    clear();
     printf("\n\n\n");
 }
 
