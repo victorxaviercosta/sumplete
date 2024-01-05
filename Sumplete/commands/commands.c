@@ -114,12 +114,15 @@ int mainMenuInput(){
 
 //Validate a file name (veryfies if it's extention is .txt).
 void validateFileName(char* file_name, bool* error){
-    int tam = strlen(file_name);
-    char file_extention[4];
+    int tam; 
+    tam = strlen(file_name);
+
+    char file_extention[5];
     file_extention[0] = file_name[tam - 4];
     file_extention[1] = file_name[tam - 3];
     file_extention[2] = file_name[tam - 2];
     file_extention[3] = file_name[tam - 1];
+    file_extention[4] = '\0';
 
     if(strcmp(file_extention, ".txt"))
         *error = true;

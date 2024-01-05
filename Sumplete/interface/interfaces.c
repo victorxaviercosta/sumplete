@@ -12,7 +12,7 @@ void newInterface(){
 //Prints-out a splash message on the screen.
 void printSplash(){
     srand(time(NULL));
-    int rng = random() % 6;
+    int rng = rand() % 6;
     switch(rng){
         case 0:
             splash(LETS_SUM);
