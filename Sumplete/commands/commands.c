@@ -24,7 +24,7 @@ int mainMenuInput(){
 
         switch(op){
             case 0:
-                remove("default_unfinished_game.txt");
+                remove("saves/default_unfinished_game.txt");
                 break;
 
             case 1:
@@ -48,9 +48,11 @@ int mainMenuInput(){
                 return 1;
 
             case 3:
+                game = createNewGame();
                 if(loadGame(&game, "default_unfinished_game.txt")){
                     sumplete(game);
                     endGame(&game);
+                    return 1;
                 } else{
                     error = true;
                     id = 1;
