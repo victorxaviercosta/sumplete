@@ -17,6 +17,7 @@
     }
 
     void splash(char* string){
-        printf(BOLD(BLUE("\t\t%s")), string);
+        //printf(BOLD(BLUE("\t\t%s")), string);
+        printf(BOLD(BLUE("\t\t\e[5m%s\e[25m")), string);
     }
 #endif
