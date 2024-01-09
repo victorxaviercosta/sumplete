@@ -8,9 +8,8 @@ int main(){
 	newInterface();
 
 	initialAnimation();
-	char enter;
 	printf(CYAN("\n\t\t\t  Precione ENTER para começar."));
-	scanf("%c", &enter);
+	bufferClear();
 
 	int procedure = 0;
 	do{

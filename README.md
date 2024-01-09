@@ -12,14 +12,14 @@
   In Sumplete you have a board composed of an n by n matrix where each row and column has a "sum clue" associated with it. This clue tells you the sum of the numbers in that row and column. For exemple, if the sum clue for a row/column is 16, then the numbers in that row/column must add up to 16.
 
 <p align="center">
-  <img width="200" src="Sumplete/images/3by3-board-unsolved.png" alt="3 x 3 Sumplete board"> <br>
+  <img width="200" src="images/3by3-board-unsolved.png" alt="3 x 3 Sumplete board"> <br>
   <i>Fig.1 - 3 x 3 Sumplete board.</i>
 </p>
   
   The cells of the board have tree different states: **Unknown**, **Keep** and **Deleted**. By default, all the cells are in the Unkown state. Your goal is to identify which cells to delete and which to keep to ensure that the sum in each column and row matches its corresponding "sum clue".
 
 <p align="center">
-  <img width="200" src="Sumplete/images/cell-states.png" alt="Cell states"> <br>
+  <img width="200" src="images/cell-states.png" alt="Cell states"> <br>
   <i>Fig.2 - Cell states: Unknown (White); Remove (Red); Keep (Green).</i>
 </p>
 
@@ -32,19 +32,19 @@
   Once you removed the cells that doesn't enter the sum, the sum clue  will light up indicating this is now a winning row/column.
 
 <p align="center">
-  <img width="200" src="Sumplete/images/not-winning-row.png" alt="A not winning row"> <br>
+  <img width="200" src="images/not-winning-row.png" alt="A not winning row"> <br>
   <i>Fig.3 - A not winning row.</i>
 </p>
 
 <p align="center">
-  <img width="200" src="Sumplete/images/winning-row.png" alt="A winnig row after marking"> <br>
+  <img width="200" src="images/winning-row.png" alt="A winnig row after marking"> <br>
   <i>Fig.4 - A winnig row after marking.</i>
 </p>
 
 Once all "sum-clues" for rows and columns are lit up, you'll have won the game!.
 
 <p align="center">
-  <img width="200" src="Sumplete/images/3by3-board-solved.png" alt="A winnig row after marking"> <br>
+  <img width="200" src="images/3by3-board-solved.png" alt="A winnig row after marking"> <br>
   <i>Fig.5 - Sumplete board after solving.</i>
 </p>
 
