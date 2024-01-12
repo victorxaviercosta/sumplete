@@ -24,19 +24,6 @@ void decToBinary(int n, int* binary, int size){
 | -> 2^(size-2)
 -> 2^(size-1)
 
-2^3 = 8
-8/2 = 4
-4%3 - 1 = 0;
-
-2^2 = 4
-4/2 = 2
-2%3 - 1 = 1;
-
-2^1 = 2
-1/2 = 0
-0%3 - 1 = 2;
-
-
 2^(size - 1) -> 1
 2^4 = 16
 16/2 = 8
@@ -51,8 +38,8 @@ bool checkColumnSum(Board* board, int size, int combinations, int start, int col
     int binary[size];
     int columnSum = 0;
     
+    //printf(BOLD(YELLOW("COLUMN: ")) "%d\n", column);
     for(int a = 0; a < combinations; a++){
-        //printf(BOLD(YELLOW("COLUMN: ")) "%d\n", column);
 
         columnSum = 0;
         decToBinary(a, binary, size);
@@ -91,8 +78,8 @@ bool checkRowSum(Board* board, int size, int combinations, int start, int row){
     int next_combinations;
     int next_start = start + 1;
     
+    //printf(BOLD(YELLOW("ROW: ")) "%d\n", row);
     for(int a = 0; a < combinations; a++){
-        //printf(BOLD(YELLOW("ROW: ")) "%d\n", row);
 
         rowSum = 0;
         decToBinary(a, binary, size);
@@ -110,7 +97,7 @@ bool checkRowSum(Board* board, int size, int combinations, int start, int row){
             //printMatrix(board->marked, size, size);
 
             next_combinations = pow(2, (size - start - 1));
-            //printf("combinations = %d\n", next_combinations);
+            //printf(BOLD(BLUE("combinations = ")) "%d\n", next_combinations);
 
             if(checkColumnSum(board, size, next_combinations, next_start, row))
                 return true;
@@ -125,41 +112,60 @@ void solve(Board* board, int size){
     checkRowSum(board, size, combinations, 0, 0);
 }
 
-
-//Tester main instance.
+//main instance for testing.
 /*
 int main(){
-    int size = 6;
+    printf(BOLD(BLUE("\t==================================\n")));
+    printf(BOLD(BLUE("\t SUMPLETE SOLVER VISUAL TESTER\n")));
+    printf(BOLD(BLUE("\t==================================\n")));
+
+    int size; char difficult;
+    printf(BOLD(RED("\nNOTE:")) "you can select a board size greater than 9 but keep in mind that the amount of tests needed grows exponentially and the execution time tends to be considerably long for boards greater than 9\n");
+    do{
+        printf(BOLD(MAGENTA("\n\tBoard size: "))); scanf("%d", &size);
+    }while(size <= 0);
+    bufferClear();
+    do{
+        printf(BOLD(MAGENTA("\n\tBoard difficult ('F', 'M' or 'D'): "))); scanf("%c", &difficult);
+    }while(difficult != 'F' && difficult != 'M' && difficult != 'D');
+
     Board* board = createNewBoard(size);
-    newBoard(board, size, 'D');
+    newBoard(board, size, difficult);
     Board* playerBoard = createNewBoard(size);
     newPlayerBoard(playerBoard, board, size);
 
+    printf(BOLD(BLUE("\nBoard: \n")));
     printBoard(board, size, playerBoard);
 
-    printf(BOLD(BLUE("\nprescribed solution: \n")));
-    printMatrix(board->marked, size, size);
-    printf("\n");
-    
     int** prescribed = createMatrix(size, size);
     for(int i = 0; i < size; i++){
         for(int j = 0; j < size; j++){
             prescribed[i][j] = board->marked[i][j];
         }
     }
+
+    printf(BOLD(BLUE("\nprescribed solution: \n")));
+    printMatrix(prescribed, size, size);
+    printf("\n");
     
     initializeMatrix(board->marked, size, size, 0);
 
+    printf(GREEN("STARTING TO SOLVE\n"));
+    printf("======================================================\n\n");
     solve(board, size);
+    printf("======================================================\n");
+    printf(GREEN("FINISHED\n"));
+
+    printf(BOLD(BLUE("\nprescribed solution: \n")));
+    printMatrix(prescribed, size, size);
 
     printf(BOLD(BLUE("found solution: \n")));
     printMatrix(board->marked, size, size);
-    printf("\n");
 
     if(compareMatrices(prescribed, board->marked, size, size)){
         printf(BOLD(GREEN("SAME SOLUTION\n")));
     } else{
-        printf(BOLD(RED("DIFFERENT\n")));
+        printf(BOLD(RED("DIFFERENT SOLUTION\n")));
     }
 
 
@@ -175,12 +181,15 @@ int main(){
         }
     }
 
+    printf(BOLD(BLUE("\nFound solution applied to the board: \n")));
+    printBoard(board, size, playerBoard);
+
     bool rowSum = compareArrays(board->r_sum, playerBoard->r_sum, size);
     bool colSum = compareArrays(board->c_sum, playerBoard->c_sum, size);
     if(rowSum && colSum)
-        printf(BOLD(GREEN("CORRECT\n")));
+        printf(BOLD(GREEN("CORRECT\n\n")));
     else
-        printf(BOLD(RED("WRONG\n")));
+        printf(BOLD(RED("WRONG\n\n")));
 
     deleteMatrix(&prescribed, size);
     deleteBoard(&playerBoard, size);

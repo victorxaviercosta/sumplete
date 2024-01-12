@@ -1,10 +1,8 @@
-//Victor Xavier Costa - 23.1.4003
-
 #include "sumpletelib.h"
 #include <stdio.h>
 
 int main(){
-
+	
 	newInterface();
 
 	initialAnimation();

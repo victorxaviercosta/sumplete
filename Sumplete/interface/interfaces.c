@@ -9,6 +9,11 @@ void newInterface(){
     printf("\n\n\n");
 }
 
+//splah message printing.
+void splash(char* string){
+    printf(BOLD(BLUE("\t\t\e[5m%s\e[25m")), string);
+}
+
 //Prints-out a splash message on the screen.
 void printSplash(){
     srand(time(NULL));
