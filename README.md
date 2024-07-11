@@ -3,7 +3,7 @@
   This repository is dedicated to the implementation of a terminal game developed as assignment for the introduction to programming course of the computer science course at UFOP (Universidade Federal de Ouro Preto).
 
 > [!NOTE]
-> This game was developed as a assignment for a brazilian university, so the whole game was made in brazillian portuguese, but the source code was all writed in english for accessibility.
+> This game was developed as an assignment for a brazilian university, so the whole game was made in brazilian portuguese, but the source code was all written in english for accessibility.
 
 ## The game
   The Sumplete game was originally created with ChatGPT through some chatbot prompts. You can try out the [web version of the game](https://sumplete.com/) via this link, where you can also learn more about the creation process in the [About](https://sumplete.com/about/) section.
